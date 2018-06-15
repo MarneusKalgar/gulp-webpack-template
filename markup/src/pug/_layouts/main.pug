@@ -1,0 +1,19 @@
+include ../../../node_modules/bemto.pug/bemto
+- set_bemto_settings({ modifier: '--' })
+
+include ../_partials/head
+include ../_blocks/modal
+
+block variables
+doctype html
+html(lang='ru')
+  +head()
+  body
+    unless debug === false
+      include ../_partials/debug
+    div.app
+      block header
+      block body
+      block footer
+    +modal()
+    include ../_partials/scripts
