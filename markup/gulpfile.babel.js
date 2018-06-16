@@ -4,11 +4,10 @@ import gulp from 'gulp';
 import del from 'del';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
+import bourbon from 'bourbon';
 import webpack from 'webpack';
 import webpackStream from 'webpack-stream';
-
-const bourbon = require('bourbon').includePaths;
-const webpackConfigDev = require('./webpack.config.dev.js');
+import webpackConfigDev from './webpack.config.dev';
 
 const $ = gulpLoadPlugins();
 const $css = gulpLoadPlugins({
@@ -18,11 +17,11 @@ const $css = gulpLoadPlugins({
 
 const AUTOPREFIXER_BROWSERS = ['last 2 versions', 'ie >= 9', 'Android >= 30'];
 const POSTCSS_PROCESSORS_DEV = [
-  $css.cssnext({ browsers: AUTOPREFIXER_BROWSERS })
+  $css.presetEnv({ browsers: AUTOPREFIXER_BROWSERS })
 ];
 
 const POSTCSS_PROCESSORS_PROD = [
-  $css.cssnext({ browsers: AUTOPREFIXER_BROWSERS }),
+  $css.presetEnv({ browsers: AUTOPREFIXER_BROWSERS }),
   $css.cssnano()
 ];
 
@@ -68,7 +67,7 @@ const PUG_CONFIG = {
   }
 };
 
-const JS_PUMBER_CONFIG = {
+const JS_PLUMBER_CONFIG = {
   errorHandler: $.notify.onError(err => ({
     title: 'Webpack',
     message: err.message
@@ -76,18 +75,8 @@ const JS_PUMBER_CONFIG = {
 };
 
 const SASS_CONFIG = {
-  includePaths: ['styles'].concat(bourbon),
+  includePaths: ['styles'].concat(bourbon.includePaths),
   outputStyle: 'expanded'
-};
-
-const BROWSERSYNC_CONFIG = {
-  server: ['build'],
-  notify: false,
-  open: false,
-  tunnel: false,
-  host: 'markup',
-  port: 9000,
-  logPrefix: 'browserSync'
 };
 
 /** CLEAN */
@@ -100,7 +89,15 @@ gulp.task('clean', [
 ]);
 
 /** SERVE */
-gulp.task('serve', () => browserSync(BROWSERSYNC_CONFIG));
+gulp.task('serve', () => browserSync({
+  server: ['build'],
+  notify: false,
+  open: false,
+  tunnel: false,
+  host: 'markup',
+  port: 9000,
+  logPrefix: 'browserSync'
+}));
 
 /** BUILD HTML */
 gulp.task('build:html', () => {
@@ -116,7 +113,7 @@ gulp.task('build:html', () => {
 /** BUILD JS */
 gulp.task('build:js', () => {
   gulp.src(PATH.src.js)
-    .pipe($.plumber(JS_PUMBER_CONFIG))
+    .pipe($.plumber(JS_PLUMBER_CONFIG))
     .pipe(webpackStream({
       config: webpackConfigDev
     }, webpack))
@@ -186,7 +183,7 @@ gulp.task('prod:html', () => {
 /** PROD JS */
 gulp.task('prod:js', () => {
   gulp.src(PATH.src.js)
-    .pipe($.plumber(JS_PUMBER_CONFIG))
+    .pipe($.plumber(JS_PLUMBER_CONFIG))
     .pipe(webpackStream({
       config: webpackConfigDev
     }, webpack))
