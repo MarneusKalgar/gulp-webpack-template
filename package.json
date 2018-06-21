@@ -51,6 +51,7 @@
     "gulp-watch": "^5.0.0",
     "is-my-json-valid": "^2.17.2",
     "minimatch": "^3.0.4",
+    "normalize-scss": "^7.0.1",
     "postcss-preset-env": "^5.1.0",
     "postcss-scss": "^1.0.5",
     "prettier": "^1.13.5",
@@ -62,7 +63,6 @@
     "webpack-stream": "^4.0.2"
   },
   "dependencies": {
-    "@glidejs/glide": "^3.0.4",
-    "normalize.css": "^8.0.0"
+    "@glidejs/glide": "^3.0.4"
   }
 }

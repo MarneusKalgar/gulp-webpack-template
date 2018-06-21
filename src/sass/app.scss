@@ -3,6 +3,7 @@
 
 // Vendor deps
 @import "vendors";
+@include normalize();
 
 // Authored Dependencies
 @import "variables";

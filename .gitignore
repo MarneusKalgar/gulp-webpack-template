@@ -30,5 +30,5 @@ yarn-error.log
 # PHPStorm
 .idea
 
-#markup node_modules
-markup/node_modules
+# VSCode
+.vscode
